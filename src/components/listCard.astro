@@ -1,0 +1,52 @@
+---
+import { Image } from "astro:assets";
+---
+<style>
+    #card-container {
+        padding: 1rem 1.5rem;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        border-style: dotted;
+        border-width: 3px 0;
+        gap: 0.5rem;
+        height: 8rem;
+    }
+    
+    .section-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    #content {        
+        width: 100%;
+    }
+
+    #action {
+        justify-content: end;
+    }
+
+    .price-number {
+        color: red;
+        font-size: 2rem;
+    }
+
+    h3, p {
+        margin: 0;
+    }
+</style>
+
+<article id="card-container">
+    <div id="image" class="section-container">        
+        <Image src="https://example.com/remote-bird.jpg" alt="A bird." width="300" height="300" />
+    </div>
+    <div id="content" class="section-container">
+        <h3>Title</h3>
+        <p>desc</p>
+    </div>
+    <div id="action" class="section-container">
+        <p>$&nbsp;<span class="price-number">PRICE</span></p>
+        <button>buy</button>
+    </div>
+</article>
