@@ -14,7 +14,7 @@ const { image_source, image_alt, title, description, price, id} = Astro.props;
         flex-direction: row;
         justify-content: space-between;
         border-style: dotted;
-        border-width: 3px 0;
+        border-width: 3px 0 0 0;
         gap: 1rem;
         height: 8rem;
     }
@@ -54,10 +54,5 @@ const { image_source, image_alt, title, description, price, id} = Astro.props;
     </div>
     <div id="action" class="section-container">
         <p>$&nbsp;<span class="price-number">{price}</span></p>
-        <button>buy</button>
     </div>
 </article>
-
-<script>
-    // TODO: open modal
-</script>

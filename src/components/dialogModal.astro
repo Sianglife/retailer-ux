@@ -1,5 +1,5 @@
 ---
-const {id, title, button_text, button_class = "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"} = Astro.props;
+const {modal_id, title, button_text, button_class = "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"} = Astro.props;
 ---
 <style>
     dialog {
@@ -28,16 +28,16 @@ const {id, title, button_text, button_class = "bg-blue-500 hover:bg-blue-700 tex
     }
 </style>
 
-<button  command="show-modal" commandfor={id}>
-    <slot name="trigger">
+<slot name="trigger">
+    <button command="show-modal" commandfor={modal_id}>
         <p class={button_class}>{button_text}</p>
-    </slot>
-</button>
+    </button>
+</slot>
 
-<dialog id={id} class="w-[90vw] max-w-md backdrop:backdrop-blur-sm">
+<dialog id={modal_id} class="w-[90vw] max-w-md backdrop:backdrop-blur-sm">
     <div id="dialog-header">
         <h4 id="dialog-title">{title}</h4>
-        <button id="dialog-close" commandfor={id} command="close">X</button>
+        <button id="dialog-close" commandfor={modal_id} command="close">X</button>
     </div>
     
     <slot name="body" />
