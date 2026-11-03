@@ -28,7 +28,11 @@ const {id, title, button_text, button_class = "bg-blue-500 hover:bg-blue-700 tex
     }
 </style>
 
-<button class={button_class} command="show-modal" class="btn btn-blue" commandfor={id}>{button_text}</button>
+<button  command="show-modal" commandfor={id}>
+    <slot name="trigger">
+        <p class={button_class}>{button_text}</p>
+    </slot>
+</button>
 
 <dialog id={id} class="w-[90vw] max-w-md backdrop:backdrop-blur-sm">
     <div id="dialog-header">
@@ -36,7 +40,7 @@ const {id, title, button_text, button_class = "bg-blue-500 hover:bg-blue-700 tex
         <button id="dialog-close" commandfor={id} command="close">X</button>
     </div>
     
-    <slot />
+    <slot name="body" />
 
     <div id="dialog-footer">
         <slot name="footer"></slot>

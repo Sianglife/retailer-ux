@@ -1,10 +1,20 @@
 ---
+import Layout from '../layout.astro';
 import ListCard from "../components/listCard.astro";
+import DialogModal from "../components/dialogModal.astro";
 ---
-<ListCard 
+<!-- <ListCard 
     image_source="https://img.technews.tw/wp-content/uploads/2015/09/Google-logo_1.jpg"
     image_alt="IMAGE"
     title="GOOGLE"
     description="abcdefg"
     price="800"
-/>
+/> -->
+
+<Layout>
+<DialogModal id="dialog" title="name" button_text="Modal">
+    <article slot="body">
+        <p>ABCDE</p>
+    </article>
+</DialogModal>
+</Layout>
