@@ -1,7 +1,13 @@
 ---
 import { Image } from "astro:assets";
+const { image_source, image_alt, title, description, price, id} = Astro.props;
 ---
 <style>
+    img {
+        max-height: 100%;
+        width: auto;
+    }
+
     #card-container {
         padding: 1rem 1.5rem;
         display: flex;
@@ -9,7 +15,7 @@ import { Image } from "astro:assets";
         justify-content: space-between;
         border-style: dotted;
         border-width: 3px 0;
-        gap: 0.5rem;
+        gap: 1rem;
         height: 8rem;
     }
     
@@ -34,19 +40,24 @@ import { Image } from "astro:assets";
 
     h3, p {
         margin: 0;
+        font-size: 1.5rem;
     }
 </style>
 
 <article id="card-container">
     <div id="image" class="section-container">        
-        <Image src="https://example.com/remote-bird.jpg" alt="A bird." width="300" height="300" />
+        <Image src={image_source} alt={image_alt} width="300" height="300" />
     </div>
     <div id="content" class="section-container">
-        <h3>Title</h3>
-        <p>desc</p>
+        <h3>{title}</h3>
+        <p>{description}</p>
     </div>
     <div id="action" class="section-container">
-        <p>$&nbsp;<span class="price-number">PRICE</span></p>
+        <p>$&nbsp;<span class="price-number">{price}</span></p>
         <button>buy</button>
     </div>
 </article>
+
+<script>
+    // TODO: open modal
+</script>
