@@ -51,6 +51,7 @@ const { image_source, image_alt, title, description, price, id} = Astro.props;
     <div id="content" class="section-container">
         <h3>{title}</h3>
         <p>{description}</p>
+        <!-- TODO: cut when description too long -->
     </div>
     <div id="action" class="section-container">
         <p>$&nbsp;<span class="price-number">{price}</span></p>

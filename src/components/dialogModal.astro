@@ -46,3 +46,21 @@ const {modal_id, title, button_text, button_class = "bg-blue-500 hover:bg-blue-7
         <slot name="footer"></slot>
     </div>
 </dialog>
+
+<script>
+const dialogs = document.querySelectorAll('dialog');
+dialogs.forEach((dialog)=>{
+    dialog.addEventListener("click", (event) => {
+        if (event.target !== dialog) return;
+
+        const rect = dialog.getBoundingClientRect();
+        const outside =
+            event.clientX < rect.left ||
+            event.clientX > rect.right ||
+            event.clientY < rect.top ||
+            event.clientY > rect.bottom;
+
+        if (outside) dialog.close();
+    });
+})
+</script>
