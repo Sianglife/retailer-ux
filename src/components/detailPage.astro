@@ -20,12 +20,21 @@ import { Image } from "astro:assets";
     }
 
     #desc_text, #other_text {
-        padding: 2rem;
+        padding: 1rem;
     }
 
     section {
         display: flex;
-        justify-items: center;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #price {
+        width: fit-content;
+    }
+
+    button {
+        margin: 1rem;
     }
 </style>
 {/* TODO: detail page */}
