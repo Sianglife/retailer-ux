@@ -10,6 +10,17 @@ import './styles/global.css'
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
 		<title>Astro</title>
+		
+		<script>
+			if (!localStorage.getItem('quantity') || localStorage.getItem('quantity') == "undefined") {
+				// Init Cart / Products
+				localStorage.setItem('quantity', JSON.stringify([]));
+				localStorage.setItem('cart', JSON.stringify({
+					total: 0,
+					items: []
+				}));
+			}
+		</script>
 	</head>
 	<body>
         <slot />

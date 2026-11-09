@@ -1,5 +1,5 @@
 ---
-const {image_source, image_alt, description, price, other_notice} = Astro.props;
+const {id, image_source, image_alt, description, price, other_notice} = Astro.props;
 import { Image } from "astro:assets";
 ---
 
@@ -37,7 +37,6 @@ import { Image } from "astro:assets";
         margin: 1rem;
     }
 </style>
-{/* TODO: detail page */}
 <section>
     <Image id="image" src={image_source} alt={image_alt} class="image" width="300" height="300" />
     <article id="desc_text">
@@ -48,5 +47,57 @@ import { Image } from "astro:assets";
 
     <p id="price">$&nbsp;<span class="price-number">{price}</span></p>
 
-    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">BUY</button>
+    <button data-id={id}, data-price={price} class="buy-btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">BUY</button>
 </section>
+
+<script>
+    function addToCart(id: string, price: number, count: number) {
+        console.log("addToCart", id, price, count);
+        let quantity = JSON.parse(localStorage.getItem('quantity') ?? '[]');
+        let cart = JSON.parse(localStorage.getItem('cart') ?? '{}');
+
+        let exist = false;
+        let total = cart.total + price * count;
+        for (let item of cart.items) {
+            if (item.id == id) {
+                item.count += count;
+                exist = true;
+            }
+        }
+        if (!exist) {
+            cart.items.push({
+                id: id,
+                count: count,
+                price: price,
+            })
+        }
+
+        exist = false;
+        for (let item of quantity) {
+            if (item.id == id) {
+                item.count += count;
+                exist = true;
+            }
+        }
+        if (!exist) {
+            quantity.push({
+                id: id,
+                count: count,
+            })
+        }
+        localStorage.setItem('quantity', JSON.stringify(quantity));
+        localStorage.setItem('cart', JSON.stringify(cart));
+    }
+
+    const btns = document.getElementsByClassName('buy-btn');
+    for (let btn of btns) {
+        console.log(btn.getAttribute('data-id'), Number(btn.getAttribute('data-price')));
+        btn.addEventListener('click', () => {
+            addToCart(btn.getAttribute('data-id') ?? '', Number(btn.getAttribute('data-price')) ?? 0, 1);
+            const dialog = document.querySelector(`#modal-${btn.getAttribute('data-id')}`);
+            if (dialog instanceof HTMLDialogElement) {
+                dialog.close();
+            }
+        })
+    }
+</script>
