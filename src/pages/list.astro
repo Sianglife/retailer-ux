@@ -2,6 +2,7 @@
 import Layout from '../layout.astro';
 import ListCard from "../components/listCard.astro";
 import DialogModal from "../components/dialogModal.astro";
+import DetailPage from '../components/detailPage.astro';
 
 const products = [
   {
@@ -9,7 +10,7 @@ const products = [
     "title": "Fresh Milk",
     "description": "Whole milk, 936 mL",
     "price": 95,
-    "image_source": "/images/milk.jpg",
+    "image_source": "https://img.technews.tw/wp-content/uploads/2015/09/Google-logo_1.jpg",
     "image_alt": "A bottle of whole milk"
   },
   {
@@ -69,10 +70,15 @@ const products = [
 
         return (
             <DialogModal modal_id={`modal-${item.id}`} data-id={item.id} title={item.title}>
-                <article slot="body">
-                  {/* TODO: detail page */}
-                    <p>{item.description}</p>
-                </article>
+                <DetailPage 
+                  slot="body" 
+                  image_source={item.image_source}
+                  image_alt={item.image_alt}
+                  title={item.title}
+                  description={item.description}
+                  price={item.price}
+                  other_notice="OTHERNOTICE"
+                />
 
                 <div id={item.id} class="detail-trigger" slot="trigger">
                     <ListCard 

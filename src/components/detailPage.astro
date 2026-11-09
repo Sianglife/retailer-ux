@@ -1,0 +1,43 @@
+---
+const {image_source, image_alt, description, price, other_notice} = Astro.props;
+import { Image } from "astro:assets";
+---
+
+<style>
+    .image {
+        justify-self: center;
+    }
+    
+    .price-number {
+        color: red;
+        font-size: 2rem;
+    }
+
+    #price {
+        margin: 0;
+        font-size: 1.5rem;
+        justify-self: center;
+    }
+
+    #desc_text, #other_text {
+        padding: 2rem;
+    }
+
+    section {
+        display: flex;
+        justify-items: center;
+    }
+</style>
+{/* TODO: detail page */}
+<section>
+    <Image id="image" src={image_source} alt={image_alt} class="image" width="300" height="300" />
+    <article id="desc_text">
+        <p>{description}</p>
+    </article>
+
+    <p id="other_text">{other_notice}</p>
+
+    <p id="price">$&nbsp;<span class="price-number">{price}</span></p>
+
+    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">BUY</button>
+</section>

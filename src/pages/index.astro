@@ -1,8 +1,15 @@
 ---
 import Layout from '../layout.astro';
 import DialogModal from '../components/dialogModal.astro';
+import DetailPage from '../components/detailPage.astro';
 ---
 <Layout>
-	<DialogModal id="dialog" title="name" button_text="Modal" />
+	<!-- <DialogModal id="dialog" title="name" button_text="Modal" /> -->
+	<DetailPage image_source="https://img.technews.tw/wp-content/uploads/2015/09/Google-logo_1.jpg"
+	image_alt="alt"
+	description="desc"
+	price="300"
+	other_notice="OTHERNOTICE"
+	/>
 </Layout>
 	
