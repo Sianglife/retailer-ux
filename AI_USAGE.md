@@ -14,6 +14,7 @@ AI assistance was used to:
 - define a repository rule that prevents direct AI generation of homework
   implementation code; and
 - provide documentation and project-configuration guidance.
+- Generate tailwind class sample for button or other component styles.
 
 ## Coursework compliance
 
