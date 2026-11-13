@@ -51,44 +51,56 @@ import { Image } from "astro:assets";
 </section>
 
 <script>
+    // Add Function
     function addToCart(id: string, price: number, count: number) {
-        console.log("addToCart", id, price, count);
+        // Init from Localstorage or Default
         let quantity = JSON.parse(localStorage.getItem('quantity') ?? '[]');
         let cart = JSON.parse(localStorage.getItem('cart') ?? '{}');
 
-        let exist = false;
-        let total = cart.total + price * count;
-        for (let item of cart.items) {
-            if (item.id == id) {
-                item.count += count;
-                exist = true;
-            }
-        }
-        if (!exist) {
-            cart.items.push({
-                id: id,
-                count: count,
-                price: price,
-            })
-        }
+        // Check Quantity
+        // Match id and add count if same id exist
+        for (let quantity_item of quantity) {
+            if (quantity_item.id == id) {
+                if (quantity_item.count < count) {                    
+                    alert("Not enough quantity in stock!");
+                    return;
+                }
+                
+                // Add to cart
+                // Check if item already exist in cart
+                for (let cart_item of cart.items) {
+                    if (cart_item.id == id) {
+                        cart_item.count += count;
+                        cart_item.price += price * count;                        
+                        cart.total = (cart.total ?? 0) + price * count; // update total
+                        quantity_item.count -= count; // Update quantity in stock
+                        
+                        // update back to localstorage
+                        localStorage.setItem('quantity', JSON.stringify(quantity));
+                        localStorage.setItem('cart', JSON.stringify(cart));
 
-        exist = false;
-        for (let item of quantity) {
-            if (item.id == id) {
-                item.count += count;
-                exist = true;
+                        return;
+                    }
+                }
+
+                // If item not exist in cart, add new item
+                cart.items.push({
+                    id: id,
+                    count: count,
+                    price: (price * count),
+                });
+        
+                cart.total = (cart.total ?? 0) + price * count; // update total
+                quantity_item.count -= count; // Update quantity in stock
+                
+                // update back to localstorage
+                localStorage.setItem('quantity', JSON.stringify(quantity));
+                localStorage.setItem('cart', JSON.stringify(cart));
             }
         }
-        if (!exist) {
-            quantity.push({
-                id: id,
-                count: count,
-            })
-        }
-        localStorage.setItem('quantity', JSON.stringify(quantity));
-        localStorage.setItem('cart', JSON.stringify(cart));
     }
 
+    // Buy button onclick
     const btns = document.getElementsByClassName('buy-btn');
     for (let btn of btns) {
         console.log(btn.getAttribute('data-id'), Number(btn.getAttribute('data-price')));
