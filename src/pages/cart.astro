@@ -51,41 +51,64 @@ import Layout from "../layout.astro";
         border-radius: 0.375rem;
     }
 
-    .cart-card-minus, .cart-card-plus {
+    button {
         background-color: white;
         color: #374151;
-        height: 2rem;
-        width: 2rem;
-        font-size: 1rem;
         border: 1px solid #d1d5db;
         border-radius: 0.375rem;
         cursor: pointer;
+        padding: 0.2rem 0.5rem;
     }
-    
-    .cart-card-minus:hover, .cart-card-plus:hover {
-        background-color: rgb(215, 215, 215);
+
+    button:hover {
+        background-color: rgb(215, 215, 215);        
+    }
+
+    .cart-card-minus, .cart-card-plus {
+        height: 2rem;
+        width: 2rem;
+        font-size: 1rem;
+    }
+
+    .cart-total-price {
+        text-align: end;
+        padding: 1rem;
+    }
+
+    .cart-total-price-number {
+        font-size: 1.5rem;
+        color: rgb(188, 2, 2);
+    }
+
+    .cart-submit-section {
+        display: flex;
+        justify-content: center;
     }
 
 </style>
 
 <Layout>
-    <article class="cart-card-container">
-        <div class="cart-card-img">
-            <img src="https://img.technews.tw/wp-content/uploads/2015/09/Google-logo_1.jpg" data-image-component="true" alt="A bottle of whole milk" data-astro-cid-3m2yufef="true" loading="lazy" decoding="async" width="300" height="300">
-        </div>
-        <div class="cart-card-title">
-            <h3>TITLE</h3>
-        </div>
-        <div class="cart-card-actions">
-            <button id="cart-card-minus-id" class="cart-card-minus">-</button>
-            <input type="number" id="cart-card-count-id" class="cart-card-count" min="0">
-            <button id="cart-card-plus-id" class="cart-card-plus">+</button>
-        </div>
-    </article>
+    <section>
+        <article class="cart-card-container">
+            <div class="cart-card-img">
+                <img src="https://img.technews.tw/wp-content/uploads/2015/09/Google-logo_1.jpg" data-image-component="true" alt="A bottle of whole milk" data-astro-cid-3m2yufef="true" loading="lazy" decoding="async" width="300" height="300">
+            </div>
+            <div class="cart-card-title">
+                <h3>TITLE</h3>
+            </div>
+            <div class="cart-card-actions">
+                <button id="cart-card-minus-id" class="cart-card-minus">-</button>
+                <input type="number" id="cart-card-count-id" class="cart-card-count" min="0">
+                <button id="cart-card-plus-id" class="cart-card-plus">+</button>
+            </div>
+        </article>
+    </section>
 
-    <article>
-        <p>total$<strong>TOTAL</strong></p>
-    </article>
+    <section>
+        <p class="cart-total-price">total&nbsp;$<strong class="cart-total-price-number">TOTAL</strong></p>
+    </section>
 
-    <button>submit</button>
+    <section class="cart-submit-section">
+        <button>submit</button>
+    </section>
 </Layout>
