@@ -1,0 +1,32 @@
+<script>
+    // Remove & Edit Function
+    function EditCart(id: string, new_count: number) {
+        // Init from Localstorage or Default
+        let quantity = JSON.parse(localStorage.getItem('quantity') ?? '[]');
+        let cart = JSON.parse(localStorage.getItem('cart') ?? '{}');
+
+        for (let cart_item of cart.items) {
+            if (cart_item.id == id) {
+                let count_offset = (new_count - cart_item.count);
+                let price_offset = count_offset * cart_item.one_price;
+                cart.total += price_offset;
+                cart_item.count = new_count;
+                
+                
+                for (let quantity_item of quantity) {
+                    if (quantity_item.id == id) {
+                        quantity_item.count -= count_offset;
+                    }
+                }
+
+                
+                // update back to localstorage
+                localStorage.setItem('quantity', JSON.stringify(quantity));
+                localStorage.setItem('cart', JSON.stringify(cart));
+                return;
+            }
+        }
+
+        alert('Id not found.')
+    }
+</script>
