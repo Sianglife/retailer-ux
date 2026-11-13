@@ -14,7 +14,14 @@ import './styles/global.css'
 		<script>
 			if (!localStorage.getItem('quantity') || localStorage.getItem('quantity') == "undefined") {
 				// Init Cart / Products
-				localStorage.setItem('quantity', JSON.stringify([]));
+				localStorage.setItem('quantity', JSON.stringify([ 
+					{id: 'product-001', count: 4},
+					{id: 'product-002', count: 14},
+					{id: 'product-003', count: 25},
+					{id: 'product-004', count: 2},
+					{id: 'product-005', count: 10},
+					{id: 'product-006', count: 8}
+				]));
 				localStorage.setItem('cart', JSON.stringify({
 					total: 0,
 					items: []
