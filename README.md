@@ -1,43 +1,22 @@
-# Astro Starter Kit: Minimal
+# Retailer UX
+有詢問過老師，可以使用自己習慣使用的astro框架製作，並生成靜態檔案繳交。
+
+## Static File Folder
+./dist/
+
+## Github Repo link
+https://github.com/Sianglife/retailer-ux
+
+## Build Static File
+原本的 static file 有絕對路徑的問題，透過 python 檔案改為相對路徑
+```sh
+npm install
+npm run build
+convert_paths.py 
+```
+
+## Get Started By Dev Mode
 
 ```sh
-pnpm create astro@latest -- --template minimal
+pnpm run dev
 ```
-
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                | Action                                           |
-| :--------------------- | :----------------------------------------------- |
-| `pnpm install`         | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
