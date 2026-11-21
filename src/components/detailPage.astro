@@ -47,71 +47,20 @@ import { Image } from "astro:assets";
 
     <p id="price">$&nbsp;<span class="price-number">{price}</span></p>
 
-    <button data-id={id}, data-price={price} class="buy-btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">BUY</button>
+    <button data-id={id} data-price={price} class="buy-btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">BUY</button>
 </section>
 
 <script>
-    // Add Function
-    function addToCart(id: string, one_price: number, count: number) {
-        // Init from Localstorage or Default
-        let quantity = JSON.parse(localStorage.getItem('quantity') ?? '[]');
-        let cart = JSON.parse(localStorage.getItem('cart') ?? '{}');
+    import { addToCart } from '../lib/cart';
 
-        // Check Quantity
-        // Match id and add count if same id exist
-        for (let quantity_item of quantity) {
-            if (quantity_item.id == id) {
-                if (quantity_item.count < count) {                    
-                    alert("Not enough quantity in stock!");
-                    return;
-                }
-                
-                // Add to cart
-                // Check if item already exist in cart
-                for (let cart_item of cart.items) {
-                    if (cart_item.id == id) {
-                        cart_item.count += count;                        
-                        cart.total = (cart.total ?? 0) + one_price * count; // update total
-                        quantity_item.count -= count; // Update quantity in stock
-                        
-                        // update back to localstorage
-                        localStorage.setItem('quantity', JSON.stringify(quantity));
-                        localStorage.setItem('cart', JSON.stringify(cart));
-
-                        return;
-                    }
-                }
-
-                // If item not exist in cart, add new item
-                cart.items.push({
-                    id: id,
-                    count: count,
-                    one_price: one_price,
-                });
-        
-                cart.total = (cart.total ?? 0) + one_price * count; // update total
-                quantity_item.count -= count; // Update quantity in stock
-                
-                // update back to localstorage
-                localStorage.setItem('quantity', JSON.stringify(quantity));
-                localStorage.setItem('cart', JSON.stringify(cart));
+    document.querySelectorAll<HTMLButtonElement>('.buy-btn').forEach((button) => {
+        button.addEventListener('click', () => {
+            try {
+                addToCart(button.dataset.id ?? '');
+                button.closest('dialog')?.close();
+            } catch (error) {
+                alert(error instanceof Error ? error.message : 'Your cart could not be saved.');
             }
-        }
-    }
-
-    // Buy button onclick
-    const btns = document.getElementsByClassName('buy-btn');
-    for (let btn of btns) {
-        console.log(btn.getAttribute('data-id'), Number(btn.getAttribute('data-price')));
-        btn.addEventListener('click', () => {
-            // Call add
-            addToCart(btn.getAttribute('data-id') ?? '', Number(btn.getAttribute('data-price')) ?? 0, 1);
-            
-            // Close dialog
-            const dialog = document.querySelector(`#modal-${btn.getAttribute('data-id')}`);
-            if (dialog instanceof HTMLDialogElement) {
-                dialog.close();
-            }
-        })
-    }
+        });
+    });
 </script>
