@@ -1,67 +1,77 @@
 ---
-const {modal_id, title, button_text, button_class = "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"} = Astro.props;
+interface Props {
+    modal_id: string;
+    title: string;
+    button_text?: string;
+    button_class?: string;
+}
+
+const { modal_id, title, button_text = 'Open details', button_class = '' } = Astro.props;
 ---
-<style>
-    dialog {
-        justify-self: center;
-        align-self: center;
-    }
 
-    #dialog-header {
-        display: flex;
-    }
-
-    #dialog-title {
-        text-align: center;
-        width: 100%;
-        justify-self: center;
-        align-self: center;
-    }
-
-    #dialog-close {
-        margin: 0.5rem;
-    }
-
-    #dialog-close:hover,
-    button:hover {
-        cursor: pointer
-    }
-</style>
-
-<slot name="trigger">
-    <button command="show-modal" commandfor={modal_id}>
-        <p class={button_class}>{button_text}</p>
-    </button>
-</slot>
-
-<dialog id={modal_id} class="w-[90vw] max-w-md backdrop:backdrop-blur-sm">
-    <div id="dialog-header">
-        <h4 id="dialog-title">{title}</h4>
-        <button id="dialog-close" commandfor={modal_id} command="close">X</button>
+<div class="dialog-modal">
+    <div class="dialog-trigger">
+        <slot name="trigger">
+            <button type="button" class:list={['dialog-open', button_class]}>{button_text}</button>
+        </slot>
     </div>
-    
-    <slot name="body" />
 
-    <div id="dialog-footer">
-        <slot name="footer"></slot>
-    </div>
-</dialog>
+    <dialog id={modal_id} class="dialog-panel">
+        <header class="dialog-header">
+            <h2 class="dialog-title">{title}</h2>
+            <button type="button" class="dialog-close">✕</button>
+        </header>
+
+        <div class="dialog-body"><slot name="body" /></div>
+
+        {Astro.slots.has('footer') && (
+            <footer class="dialog-footer"><slot name="footer" /></footer>
+        )}
+    </dialog>
+</div>
 
 <script>
-const dialogs = document.querySelectorAll('dialog');
-dialogs.forEach((dialog)=>{
-    // Edit from Sample given by AI
-    dialog.addEventListener("click", (event) => {
-        if (event.target !== dialog) return;
+    document.querySelectorAll<HTMLElement>('.dialog-modal').forEach((root) => {
+        const dialog = root.querySelector<HTMLDialogElement>('.dialog-panel')!;
+        const trigger = root.querySelector<HTMLElement>('.dialog-trigger')!;
+        const close = root.querySelector<HTMLButtonElement>('.dialog-close')!;
 
-        const rect = dialog.getBoundingClientRect();
-        const outside =
-            event.clientX < rect.left ||
-            event.clientX > rect.right ||
-            event.clientY < rect.top ||
-            event.clientY > rect.bottom;
+        trigger.addEventListener('click', () => dialog.showModal());
+        close.addEventListener('click', () => dialog.close());
 
-        if (outside) dialog.close();
+        dialog.addEventListener('click', (event) => {
+            if (event.target !== dialog) return;
+            const rect = dialog.getBoundingClientRect();
+            if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.close();
+        });
     });
-})
 </script>
+
+<style>
+    .dialog-panel {
+        margin: auto;
+        width: min(92vw, 36rem);
+        max-height: 85dvh;
+        overflow-y: auto;
+        border: 1px solid #d1d5db;
+        border-radius: 0.75rem;
+        padding: 0;
+        box-shadow: 0 20px 60px #0003;
+    }
+    .dialog-panel::backdrop { background: #0006; backdrop-filter: blur(3px); }
+    .dialog-header { display: grid; grid-template-columns: 2.5rem minmax(0, 1fr) 2.5rem; align-items: center; gap: 0.5rem; padding: 1rem; border-bottom: 1px solid #e5e7eb; }
+    .dialog-title { grid-column: 2; text-align: center; font-size: 1.4rem; font-weight: 700; overflow-wrap: anywhere; }
+    .dialog-body, .dialog-footer { padding: 1rem; }
+    .dialog-footer { border-top: 1px solid #e5e7eb; }
+    .dialog-close, .dialog-open {
+        cursor: pointer;
+        border: 1px solid #d1d5db;
+        border-radius: 0.375rem;
+        padding: 0.4rem 0.75rem;
+        background: white;
+        color: #374151;
+    }
+    .dialog-close { grid-column: 3; }
+    .dialog-close:hover, .dialog-open:hover { background: #f3f4f6; }
+    .dialog-close:focus-visible, .dialog-open:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+</style>

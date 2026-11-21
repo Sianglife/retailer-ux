@@ -1,66 +1,94 @@
 ---
-const {id, image_source, image_alt, description, price, other_notice} = Astro.props;
-import { Image } from "astro:assets";
+import { Image } from 'astro:assets';
+
+interface Props {
+    id: string;
+    image_source: string;
+    image_alt: string;
+    description: string;
+    price: number;
+    other_notice?: string;
+}
+
+const { id, image_source, image_alt, description, price, other_notice } = Astro.props;
+const formattedPrice = price.toLocaleString('zh-TW', { maximumFractionDigits: 2 });
 ---
 
-<style>
-    .image {
-        justify-self: center;
-    }
-    
-    .price-number {
-        color: red;
-        font-size: 2rem;
-    }
+<section class="product-detail" data-id={id}>
+    <Image src={image_source} alt={image_alt} class="product-image" width="300" height="300" />
+    <p class="product-description">{description}</p>
+    {other_notice && <p class="product-notice">{other_notice}</p>}
+    <p class="product-stock">Checking stock…</p>
+    <p class="product-status" role="status"></p>
 
-    #price {
-        margin: 0;
-        font-size: 1.5rem;
-        justify-self: center;
-    }
-
-    #desc_text, #other_text {
-        padding: 1rem;
-    }
-
-    section {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    #price {
-        width: fit-content;
-    }
-
-    button {
-        margin: 1rem;
-    }
-</style>
-<section>
-    <Image id="image" src={image_source} alt={image_alt} class="image" width="300" height="300" />
-    <article id="desc_text">
-        <p>{description}</p>
-    </article>
-
-    <p id="other_text">{other_notice}</p>
-
-    <p id="price">$&nbsp;<span class="price-number">{price}</span></p>
-
-    <button data-id={id} data-price={price} class="buy-btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">BUY</button>
+    <div class="product-purchase">
+        <p class="product-price">$<strong class="product-price-number">{formattedPrice}</strong></p>
+        <button type="button" class="buy-btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">BUY</button>
+    </div>
 </section>
 
 <script>
-    import { addToCart } from '../lib/cart';
+    import { addToCart, getQuantity } from '../lib/cart';
 
-    document.querySelectorAll<HTMLButtonElement>('.buy-btn').forEach((button) => {
-        button.addEventListener('click', () => {
+    document.querySelectorAll<HTMLElement>('.product-detail').forEach((root) => {
+        const id = root.dataset.id ?? '';
+        const button = root.querySelector<HTMLButtonElement>('.buy-btn')!;
+        const stock = root.querySelector<HTMLElement>('.product-stock')!;
+        const status = root.querySelector<HTMLElement>('.product-status')!;
+        const dialog = root.closest('dialog');
+        const image = root.querySelector<HTMLImageElement>('.product-image')!;
+
+        function updateAvailability() {
             try {
-                addToCart(button.dataset.id ?? '');
-                button.closest('dialog')?.close();
+                const available = getQuantity().find((item) => item.id === id)?.count ?? 0;
+                stock.textContent = available > 0 ? `${available} available` : 'Out of stock';
+                button.disabled = available === 0;
+                button.textContent = available > 0 ? 'BUY' : 'Out of stock';
+            } catch {
+                stock.textContent = '';
+                status.textContent = 'Product availability could not be loaded.';
+                button.disabled = true;
+            }
+        }
+
+        button.addEventListener('click', () => {
+            status.textContent = '';
+            try {
+                addToCart(id);
+                dialog?.close();
             } catch (error) {
-                alert(error instanceof Error ? error.message : 'Your cart could not be saved.');
+                status.textContent = error instanceof Error ? error.message : 'Your cart could not be saved.';
+                updateAvailability();
             }
         });
+        dialog?.addEventListener('toggle', () => {
+            if (dialog.open) {
+                status.textContent = '';
+                updateAvailability();
+            }
+        });
+        image.addEventListener('error', () => { image.hidden = true; });
+        if (image.complete && image.naturalWidth === 0) image.hidden = true;
+
+        window.addEventListener('cart-updated', updateAvailability);
+        window.addEventListener('storage', (event) => {
+            if (event.key === 'cart' || event.key === 'quantity' || event.key === null) updateAvailability();
+        });
+        updateAvailability();
     });
 </script>
+
+<style>
+    .product-detail { display: flex; flex-direction: column; align-items: center; gap: 1rem; text-align: center; }
+    .product-image { width: min(100%, 18rem); max-height: 30dvh; object-fit: contain; align-self: center; }
+    .product-description { color: #374151; overflow-wrap: anywhere; }
+    .product-notice, .product-stock { color: #4b5563; }
+    .product-status { color: #b91c1c; }
+    .product-status:empty { display: none; }
+    .product-purchase { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+    .product-price { white-space: nowrap; }
+    .product-price-number { color: #bc0202; font-size: 1.5rem; margin-left: 0.25rem; }
+    .buy-btn { cursor: pointer; margin: 1rem; }
+    .buy-btn:disabled { cursor: not-allowed; opacity: 0.45; }
+    .buy-btn:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+</style>
