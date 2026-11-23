@@ -33,7 +33,6 @@ const formattedPrice = price.toLocaleString("zh-TW", { maximumFractionDigits: 2 
 		justify-content: space-between;
 		gap: 1rem;
 		width: 100%;
-		height: 8rem;
 		padding: 1rem 1.5rem;
 		border-style: dotted;
 		border-width: 3px 0 0;
@@ -43,6 +42,7 @@ const formattedPrice = price.toLocaleString("zh-TW", { maximumFractionDigits: 2 
 		text-align: left;
 		cursor: pointer;
 	}
+
 	.list-card:hover {
 		background: #f3f4f6;
 	}
@@ -56,10 +56,10 @@ const formattedPrice = price.toLocaleString("zh-TW", { maximumFractionDigits: 2 
 		flex-shrink: 0;
 	}
 	.list-card-image img {
-		max-height: 100%;
+		max-height: 7rem;
 		width: auto;
 		object-fit: contain;
-		min-width: 10rem;
+		min-width: 11.5rem;
 	}
 	.list-card-content {
 		display: flex;
@@ -70,8 +70,7 @@ const formattedPrice = price.toLocaleString("zh-TW", { maximumFractionDigits: 2 
 	}
 	.list-card-title,
 	.list-card-description {
-		font-size: 1.5rem;
-		font-weight: normal;
+		font-size: 1rem;
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
@@ -86,5 +85,25 @@ const formattedPrice = price.toLocaleString("zh-TW", { maximumFractionDigits: 2 
 		font-size: 2rem;
 		font-weight: normal;
 		color: #bc0202;
+	}
+
+	@media (max-width: 768px) {
+		.list-card {
+			flex-direction: column;
+			height: auto;
+		}
+		.list-card-image {
+			/* height: 8rem; */
+			min-width: auto;
+		}
+		.list-card-title, .list-card-description, .list-card-price {
+			font-size: 1rem;
+		}
+		.list-card-price {
+			justify-content: center;
+		}
+		.price-number {
+			font-size: 1.2rem;
+		}
 	}
 </style>
