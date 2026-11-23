@@ -2,7 +2,7 @@
 有詢問過老師，可以使用自己習慣使用的astro框架製作，並生成靜態檔案繳交。
 
 ## Static File Folder
-./dist/
+dist/
 
 ## Github Repo link
 https://github.com/Sianglife/retailer-ux
@@ -18,5 +18,5 @@ convert_paths.py
 ## Get Started By Dev Mode
 
 ```sh
-pnpm run dev
+npm run dev
 ```
